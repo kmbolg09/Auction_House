@@ -1,0 +1,34 @@
+.col-md-8
+  = link_to "Home", root_path, class: "btn btn-primary"
+  %h1=@auction.title
+  %p=@auction.details
+  %p=@auction.end_time.strftime("%B, %d, %Y")
+  %p=@auction.price
+
+  = link_to "Edit", edit_auction_path(@auction), class: "btn btn-info"
+  |
+  = link_to "Delete", @auction, method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger"
+  %hr
+
+  #bids-create
+    = simple_form_for [@auction, Bid.new] do |f|
+      =f.input :amount, label: "Amount:"
+      %br
+      =f.submit "Bid", class: "btn btn-primary"
+  %hr    
+
+  .row
+    .col-md-8.col-lg-8
+      .well
+        %h3= "Current Price:" 
+        %p=@auction.reserve_price
+    %h2 Bids: 
+    .col-md-8.col-lg-8
+      .well
+        -@bids.each do |bid| 
+          .well-bids
+            = "$"
+            =bid.amount
+            %hr
+            =bid.created_at.strftime("%B, %d, %Y")
+            %br
